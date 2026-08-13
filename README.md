@@ -1,85 +1,28 @@
-# Telegram AI Group Bot — Railway
+# Telegram AI Group Bot — Railway + SQLite
 
-Bot Telegram AI untuk grup dengan:
-- AI Chat natural
-- Context-aware / topic-aware
-- AI Group Assistant
-- Group Memory
-- Gemini Web Search grounding
-- AI Vision
-- AI Image Generator
-- Text-to-Speech dengan pilihan suara pria/wanita
-- Translator
-- Photo Translator
-- Inline Keyboard
-- Dot commands (`.ai`, `.search`, dll.)
-- Reply-based action tanpa menu otomatis
-- `.hapus`
-- Auto-delete pesan bot
-- Permission per fitur: Owner / Admin / All Members
-- Pengaturan personality per grup
+Telegram group AI bot using Gemini and a local SQLite file database.
 
-## Model
+## Required Railway variables
 
-AI utama:
-`gemini-3.1-flash-lite`
+- `TELEGRAM_BOT_TOKEN`
+- `OWNER_ID`
+- `GEMINI_API_KEY`
 
-Image:
-`gemini-3.1-flash-image`
+No `DATABASE_URL` is required.
 
-TTS:
-`gemini-3.1-flash-tts-preview`
+## Optional database path
 
-Semua memakai `GEMINI_API_KEY` yang sama.
+`BOT_DB_PATH` defaults to `bot.db`.
+For a persistent Railway Volume mounted at `/data`, set:
 
-## Railway
+`BOT_DB_PATH=/data/bot.db`
 
-1. Tambahkan service PostgreSQL pada project Railway.
-2. Deploy repository bot.
-3. Isi variables pada service bot:
-   - `TELEGRAM_BOT_TOKEN`
-   - `GEMINI_API_KEY`
-   - `DATABASE_URL` — URL PostgreSQL Railway.
-4. Model variables boleh dibiarkan default.
+Without a persistent volume, the SQLite file can be lost when Railway replaces the service/container. The bot will recreate the database tables on startup.
 
-Railway PostgreSQL menyediakan `DATABASE_URL` dan variabel koneksi PostgreSQL secara otomatis.
+## Optional model/settings variables
 
-Railway akan menjalankan:
-`python main.py`
-
-## Penting
-
-Bot harus menjadi admin grup bila ingin `.hapus` dan penghapusan otomatis bekerja secara konsisten.
-
-Default semua fitur = Owner Only.
-
-Untuk membuka fitur:
-Settings -> Permissions -> pilih fitur -> Owner/Admin/All.
-
-## Commands
-
-`.ai pertanyaan`
-`.search pertanyaan`
-`.image prompt`
-`.vision` (reply foto)
-`.translate en teks`
-`.translate id` (reply pesan)
-`.translatefoto` (reply foto)
-`.tts teks`
-`.memory`
-`.memory tambah isi`
-`.memory clear`
-`.gaya`
-`.permission`
-`.settings`
-`.hapus` (reply pesan bot)
-`.hapus 5`
-`.help`
-
-## Catatan TTS
-
-Suara yang disediakan:
-- Kore / Aoede / Leda = suara wanita
-- Puck / Charon / Orus = suara pria
-
-Nama voice mengikuti daftar voice Gemini TTS. Jika suatu voice tidak tersedia pada akun/model saat ini, bot akan mengembalikan error API secara aman tanpa mematikan proses bot.
+- `GEMINI_MODEL=gemini-3.1-flash-lite`
+- `GEMINI_IMAGE_MODEL=gemini-3.1-flash-image`
+- `GEMINI_TTS_MODEL=gemini-3.1-flash-tts-preview`
+- `CONTEXT_LIMIT=20`
+- `MEMORY_LIMIT=50`
