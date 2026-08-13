@@ -1,0 +1,4 @@
+aiogram>=3.24,<4
+google-genai>=1.60,<2
+SQLAlchemy>=2.0,<3
+asyncpg>=0.30,<1
